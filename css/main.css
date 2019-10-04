@@ -1,0 +1,16 @@
+.logo{
+    width:auto;
+    height:64px;
+}
+
+.left{
+    margin-left:5px;
+}
+
+.right{
+    margin-right:5px;
+}
+
+.toast-body{
+    color:green;
+}

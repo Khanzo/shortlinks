@@ -66,14 +66,18 @@ class ShortHandler {
         $sets = explode('|', self::$chars);
         $all = '';
         $randString = '';
+        
         foreach ($sets as $set) {
             $randString .= $set[array_rand(str_split($set))];
             $all .= $set;
         }
+        
         $all = str_split($all);
+        
         for ($i = 0; $i < $length - count($sets); $i++) {
             $randString .= $all[array_rand($all)];
         }
+        
         $randString = str_shuffle($randString);
         $uniq = 'z' . $randString;
         return $uniq;
@@ -86,15 +90,18 @@ class ShortHandler {
         $uniq = $this->genLink($length);
         $MyBaseReg = new MyBase();
         $ex = $MyBaseReg->existsShort($uniq);
+        
         while ($ex !== false) {
             $step++;
             $uniq = $this->genLink($length);
             $ex = $MyBaseReg->existsShort($uniq);
+            
             if ($step > 20) {
                 $length++;
                 $step = 0;
             }
         }
+        
         $MyBaseReg->saveLink($url, $cashe, $uniq);
         unset($MyBaseReg);
         return $uniq;

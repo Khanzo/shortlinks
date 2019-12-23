@@ -49,10 +49,12 @@ class MyBase {
         $result = $stmt->get_result();
         $stmt->close();
         $rows = $result->num_rows;
+        
         if ($rows > 0) {
             $obj = $result->fetch_object();
             $r = $obj->shorturl;
         }
+        
         return $r;
     }
 
@@ -66,9 +68,11 @@ class MyBase {
         $result = $stmt->get_result();
         $stmt->close();
         $rows = $result->num_rows;
+        
         if ($rows > 0) {
             $r = true;
         }
+        
         return $r;
     }
 
@@ -82,7 +86,9 @@ class MyBase {
         $result = $stmt->get_result();
         $stmt->close();
         $rows = $result->num_rows;
+        
         if ($rows > 0) {
+            
             while ($obj = $result->fetch_object()) {
                 $item = array(
                     'id' => $obj->id,
@@ -93,7 +99,9 @@ class MyBase {
                 );
                 array_push($r, $item);
             }
+            
         }
+        
         return $r;
     }
 
@@ -111,11 +119,13 @@ class MyBase {
     //получем количество записей
     public function allCount() {
         $count = 0;
+        
         if ($result = $this->mMySqli->query('SELECT COUNT(*) AS Summ FROM `shortlinks`')) {
             $row = $result->fetch_array(MYSQLI_ASSOC);
             $count = $row['Summ'];
             $result->Close();
         }
+        
         return $count;
     }
 
@@ -130,7 +140,9 @@ class MyBase {
         $result = $stmt->get_result();
         $stmt->close();
         $rows = $result->num_rows;
+        
         if ($rows > 0) {
+            
             while ($obj = $result->fetch_object()) {
                 $item = array(
                     'id' => $obj->id,
@@ -141,9 +153,11 @@ class MyBase {
                 );
                 array_push($r, $item);
             }
+            
         } else {
             $r = [];
         }
+        
         return $r;
     }
 

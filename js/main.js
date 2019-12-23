@@ -128,9 +128,11 @@ function getList(page) {
         dataType: "json",
         data: {p: page, act: 1}
     }).done(function (data) {
+        
         if (data.error == 1) {
             return;
         }
+        
         renderTable(data);
     }).fail(function (xhr, status, errorThrown) {
         console.log("Error: " + errorThrown);
@@ -142,12 +144,15 @@ function getList(page) {
 //render table
 function renderTable(data) {
     let items = data.table;
+    
     if (items.count < 1) {
         return;
     }
+    
     $('#linktable').html('');
     $('#DownPagins').html('');
     $('#UpPagins').html('');
+    
     for (k in items) {
         let item = items[k];
         let c = ++k;
@@ -160,6 +165,7 @@ function renderTable(data) {
         row += '<i class="fas fa-trash"></i></button></td></tr>';
         $('#linktable').append(row);
     }
+    
     let offset = data.offset;
     let all = data.all;
     renderPagins(offset, all);
@@ -175,9 +181,11 @@ function renderPagins(offset, all) {
     if ((offset < 1) || (page < 1) || (offset >= all) || (all < 1)) {
         return;
     }
+    
     var c = div(all, offset);
     let ostatok = all % offset;
     c = (ostatok > 0) ? c = c + 1 : c;
+    
     if (c < 2) {
         return;
     }
@@ -194,6 +202,7 @@ function renderPagins(offset, all) {
     var next = (pageNext <= c) ? next = '<li class="page-item"><a class="page-link" href="' + nextLink + '">&nbsp;<i class="fas fa-angle-right"></i></a></li>' : '';
     var listing = '';
     var i = 1;
+    
     while (i <= c) {
         pp = i;
         var pageLink = site + '/?p=' + pp;
@@ -219,9 +228,11 @@ function dellink(ids)
     }).done(function (data) {
         $('#delToast').html('<strong>Удалено</strong>');
         $('#delToast').show();
+        
         setTimeout(function () {
             $('#delToast').hide();
         }, 1000);
+        
         getList(page);
     }).fail(function (xhr, status, errorThrown) {
         console.log("Error: " + errorThrown);
@@ -233,6 +244,7 @@ function dellink(ids)
 //генерация и сохранение
 $('#savebtn').on('click', function () {
     var inputValue = $('#longlink').val().trim();
+    
     if (inputValue) {
         $('#shotlink').val('');
         $.ajax({
@@ -241,21 +253,26 @@ $('#savebtn').on('click', function () {
             dataType: "json",
             data: {u: Base64.encode(inputValue), act: 2}
         }).done(function (data) {
+            
             if (data.error == 1) {
                 return;
             }
+            
             if (data.error == 2) {
                 var shortcode = (data.shortcode !== false) ? shortcode = data.shortcode.trim() : '';
                 $('#shotlink').val(shortcode);
                 return;
             }
+            
             var shortcode = (data.shortcode !== false) ? shortcode = data.shortcode.trim() : '';
             $('#shotlink').val(shortcode);
             $('#textToast').html('<strong>Сохранено</strong>');
             $('#textToast').show();
+            
             setTimeout(function () {
                 $('#textToast').hide();
             }, 1000);
+            
             saved = 1;
         }).fail(function (xhr, status, errorThrown) {
             console.log("Error: " + errorThrown);
@@ -269,6 +286,7 @@ $('#savebtn').on('click', function () {
 $('#shortbtn').on('click', function () {
     //копируем через select поля
     var inputValue = $('#shotlink').val().trim();
+    
     if (inputValue) {
         var fullLink = site + '/' + inputValue;
         $('#shotlink').val(fullLink);
@@ -276,13 +294,13 @@ $('#shortbtn').on('click', function () {
         document.execCommand('copy');
         const sel = window.getSelection();
         sel.removeAllRanges();
-
         $('#shotlink').val(inputValue);
         $('#textToast').html('<strong>Скопировано</strong>');
         $('#textToast').show();
+        
         setTimeout(function () {
             $('#textToast').hide();
-        }, 1000);
+        }, 1000);        
     }
 });
 
@@ -302,6 +320,7 @@ $('#addLinkModal').on('show.bs.modal', function (e) {
 $('#seabtn').on('click', function () {
     //поиск по shortcode
     var inputValue = $('#sea').val().trim();
+    
     if (inputValue) {
         $.ajax({
             url: back + 'actions.php',
@@ -309,12 +328,15 @@ $('#seabtn').on('click', function () {
             dataType: "json",
             data: {s: Base64.encode(inputValue), act: 4}
         }).done(function (data) {
+            
             if (data.error == 1) {
                 return;
             }
+            
             if (data.table.count < 1) {
                 return;
             }
+            
             renderTable(data);
         }).fail(function (xhr, status, errorThrown) {
             console.log("Error: " + errorThrown);

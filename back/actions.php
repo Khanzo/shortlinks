@@ -11,6 +11,7 @@ if (!isset($_POST['act'])) {
 }
 
 $act = $_POST['act'];
+
 if ((count($act) > 2) || (count($act) == 0)) {
     $arr = array('error' => 1);
     echo json_encode($arr);
@@ -18,6 +19,7 @@ if ((count($act) > 2) || (count($act) == 0)) {
 }
 
 if ($act == 1) {
+    
     //load linka offset count
     if (isset($_POST['p'])) {
         $p = intval($_POST['p']);
@@ -27,14 +29,17 @@ if ($act == 1) {
         unset($shortHandler);
         $arr = array('table' => $r, 'error' => 0, 'all' => $all, 'offset' => $offset);
         echo json_encode($arr);
+        
     } else {
         $arr = array('error' => 1);
         echo json_encode($arr);
     }
+    
     return;
 }
 
 if ($act == 2) {
+    
     //generate and save
     if ((isset($_POST['u'])) && (trim($_POST['u']) != '')) {
 
@@ -42,6 +47,7 @@ if ($act == 2) {
         $cashe = hash("sha256", $url);
         $shortHandler = new ShortHandler($offset);
         $r = $shortHandler->exists($cashe);
+        
         if ($r === 'false') {
             $g = $shortHandler->generate($url, $cashe);
             $arr = array('shortcode' => $g, 'error' => 0);
@@ -57,10 +63,12 @@ if ($act == 2) {
         $arr = array('error' => 1);
         echo json_encode($arr);
     }
+    
     return;
 }
 
 if ($act == 3) {
+    
     //delete
     if (isset($_POST['id'])) {
         $id = intval($_POST['id']);
@@ -68,16 +76,19 @@ if ($act == 3) {
         $shortHandler->delete($id);
         unset($shortHandler);
     }
+    
     return;
 }
 
 if ($act == 4) {
+    
     //search
     if ((isset($_POST['s'])) && (trim($_POST['s']) != '')) {
 
         $url = trim(base64_decode($_POST['s']));
         $shortHandler = new ShortHandler($offset);
         $r = $shortHandler->existsShort($url);
+        
         if ($r == []) {
             $arr = array('error' => 1);
             echo json_encode($arr);
@@ -86,11 +97,13 @@ if ($act == 4) {
             $arr = array('table' => $r, 'error' => 0);
             echo json_encode($arr);
         }
+        
         unset($shortHandler);
     } else {
         $arr = array('error' => 1);
         echo json_encode($arr);
     }
+    
     return;
 }
 ?>
